@@ -9,12 +9,10 @@ import socket
 import json
 import time
 import yaml
-#import paho.mqtt.client as mqtt
 import paho.mqtt.subscribe as subscribe
 
 
-#DEBUG = True
-DEBUG = True
+DEBUG = False
 
 config_path=os.path.expanduser("~/.mqttgraph.yml")
 
