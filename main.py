@@ -3,15 +3,68 @@
 # Christian Bryn <chr.bryn@gmail.com> 20117
 # -*- coding: utf-8 -*-
 
+import sys
+import os
+import socket
+import json
+import time
+import yaml
 #import paho.mqtt.client as mqtt
 import paho.mqtt.subscribe as subscribe
 
-import sys, os, socket, json, time
 
 #DEBUG = True
 DEBUG = True
 
-config = { 'mqtt_server': 'sasha', 'mqtt_topics': { 'arduino/bedroom/sensor2': ['moisture'] }, 'carbon_server': 'brynaws', 'carbon_port': 2003 }
+config_path=os.path.expanduser("~/.mqttgraph.yml")
+
+## config defaults
+#config = {
+#    'mqtt_server': 'mqttserver',
+#    'mqtt_topics': {
+#        'home/bedroom/sensor2': ['temperature']
+#    },
+#    'carbon_server': 'graphiteserver',
+#    'carbon_port': 2003
+#}
+config = {
+    'mqtt_port': 1883,
+    'carbon_port': 2003
+}
+
+if os.path.exists(config_path):
+    with open(config_path, 'r') as ymlfile:
+        yml = yaml.load(ymlfile)
+        # merge config:
+        config.update(yml)
+else:
+    print('no config file found at %s, using defaults' % config_path)
+
+# import some settings from the environment if they are set
+if 'CARBON_SERVER' in os.environ:
+    config['carbon_server'] = os.environ['CARBON_SERVER']
+if 'CARBON_PORT' in os.environ:
+    config['carbon_port'] = os.environ['CARBON_PORT']
+if 'MQTT_SERVER' in os.environ:
+    config['mqtt_server'] = os.environ['MQTT_SERVER']
+# fetching topics + metrics from the shell isn't as obvious...
+
+if 'mqtt_server' not in config:
+    print('mqtt_server config variable not set')
+    sys.exit(1)
+if 'mqtt_port' not in config:
+    print('mqtt_port config variable not set')
+    sys.exit(1)
+if 'carbon_server' not in config:
+    print('carbon_server config variable not set')
+    sys.exit(1)
+if 'carbon_port' not in config:
+    print('carbon_port config variable not set')
+    sys.exit(1)
+if 'mqtt_topics' not in config:
+    print('mqtt_topics config variable not set')
+    sys.exit(1)
+
 
 def on_message_print(client, userdata, message):
     """ Print received MQTT message to stdout """
@@ -38,17 +91,16 @@ def on_message_carbon(client, userdata, message):
             sock.connect((config['carbon_server'], config['carbon_port']))
             sock.sendall(payload.encode())
             sock.close()
-        except OSError as e:
-            print("Could not connect to host %s:%s: %s" % (config['carbon_server'], config['carbon_port'], e))
+        except OSError as err:
+            print("Could not connect to host %s:%s: %s" % (config['carbon_server'], config['carbon_port'], err))
 
 def main():
+    """ Main run, start subscribing """
     if DEBUG:
         print(config['mqtt_server'])
         print(config['mqtt_topics'])
 
-    subscribe.callback(on_message_carbon, [x for x in config['mqtt_topics']], hostname=config['mqtt_server'])
+    subscribe.callback(on_message_carbon, [x for x in config['mqtt_topics']], hostname=config['mqtt_server'], port=config['mqtt_port'])
 
 if __name__ == "__main__":
     main()
-
-
