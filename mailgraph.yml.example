@@ -1,0 +1,5 @@
+'mqtt_server': 'mqttserver'
+'mqtt_topics':
+    'home/bedroom/sensor1': ['temperature']
+'carbon_server': 'carbonserver'
+'carbon_port': 2003
