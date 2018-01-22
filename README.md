@@ -7,7 +7,7 @@ Send MQTT JSON metrics to a graphite (carbon) server.
 Configuration
 -------------
 
-Configure by editing _~/.mqttgraph_:
+Configure by editing _~/.mqttgraph.yml_:
 
     'mqtt_server': 'mqttserver'
     'mqtt_topics':
