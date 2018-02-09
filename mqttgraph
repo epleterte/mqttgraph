@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # MQTT Subscriber for posting JSON metric data to a graphite (carbon) server
-# Christian Bryn <chr.bryn@gmail.com> 20117
+# Christian Bryn <chr.bryn@gmail.com> 20117-2018
 # -*- coding: utf-8 -*-
 
 import sys

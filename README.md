@@ -27,4 +27,4 @@ Next, find a way to run this permanently (though screen always works...)
 Credits
 -------
 
-Christian Bryn <chr.bryn@gmail.com> 2017
+Christian Bryn <chr.bryn@gmail.com> 2017-2018
