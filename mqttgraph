@@ -74,7 +74,6 @@ def on_message_carbon(client, userdata, message):
         print(message.payload)
     data = json.loads(message.payload.decode("utf-8"))
     for metric in config['mqtt_topics'][message.topic]:
-        value = data['moisture']
         value = data[metric]
         timestamp = int(time.time())
         metric_path = message.topic.replace('/', '.') + '.' + metric
