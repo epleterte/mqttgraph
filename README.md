@@ -18,9 +18,9 @@ Configure by editing _~/.mqttgraph.yml_:
 Usage
 -----
 
-Python3 is required. Set up the config file, then run _main.py_
+Python3 is required. Set up the config file, then run _mqttgraph_
 
-    ./main.py
+    ./mqttgraph
 
 Next, find a way to run this permanently (though screen always works...)
 
